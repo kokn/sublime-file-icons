@@ -28,10 +28,10 @@ CURRENT = {
 }
 
 DIST = 'dist'
-PATCHES = 'zpatches'
+PATCHES = 'patches'
 THEMES = '*' + THEME_EXTENSION
 SUPPORTED_THEMES = '.st-file-icons'
-ALIASES = 'languages'
+ALIASES = 'aliases'
 
 
 def get_settings():

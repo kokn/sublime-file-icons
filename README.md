@@ -125,7 +125,7 @@ In simple terms, `zz File Icons` does the following:
 2. Checks if themes that don't support it are already patched, if not
 3. Patches them by:
     - Generating `<theme-name>.sublime-theme` files from a [template][template].
-    - Putting them into `dist/zpatches/` directory.
+    - Putting them into `dist/patches/` directory.
 4. For themes that support it, provides `.tmPreferences` files by default (user can override icons provided by the theme via `"force_override": true`)
 5. After restarting Sublime Text, the patched themes will be updated to use the icons provided by `zz File Icons`
 
@@ -165,7 +165,7 @@ This package contains icons provided by:
 
 Source icons are provided in SVG format (Sublime Text doesn't currently support it). We convert them to @1x, @2x and @3x PNG assets before each release via a custom `gulp` task. 
 
-Rasterized icons can be found in `dist/zpatches` folder.
+Rasterized icons can be found in `dist/patches` folder.
 
 ## Change Log
 
@@ -207,7 +207,7 @@ I've put a lot of time and effort into making **Sublime File Icons** awesome. If
 [details]: https://forum.sublimetext.com/t/sublime-text-3-file-icons-in-sidebar/21134/4
 [downloads]: https://packagecontrol.io/packages/zz%20File%20Icons
 [getting-started]: https://youtu.be/bTIOL-5SxHY 'Watch "Getting Started with File Icons" on YouTube'
-[icons]: https://github.com/ihodev/sublime-file-icons/tree/dev/dist/zpatches/icons
+[icons]: https://github.com/ihodev/sublime-file-icons/tree/dev/dist/patches/icons
 [known-issues]: https://github.com/ihodev/sublime-file-icons#known-issues
 [new-issue]: https://github.com/ihodev/sublime-file-icons/issues/new
 [packages]: https://github.com/ihodev/sublime-file-icons/blob/dev/PACKAGES.md

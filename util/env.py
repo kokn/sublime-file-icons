@@ -42,8 +42,8 @@ def get_installed_themes():
         installed_themes.setdefault(os.path.basename(os.path.dirname(ires)),
                                     []).append(os.path.basename(ires))
 
-    if 'zpatches' in installed_themes:
-        del installed_themes['zpatches']
+    if 'patches' in installed_themes:
+        del installed_themes['patches']
 
     return installed_themes
 
