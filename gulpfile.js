@@ -1,12 +1,12 @@
-/* File Icons Builder
+/* A File Icon Builder
  * -------------------------------------------------------------------------- *
- * Developed with love & patience by Ihor Oleksandrov
+ * Developed with love & patience by Ihor Oleksandrov <@ihodev>
  * -------------------------------------------------------------------------- */
 
 'use strict';
 
 /*
- * > Plugins
+ * Plugins
  */
 
 var gulp = require('gulp');
@@ -21,22 +21,22 @@ var merge = require('merge-stream');
 var $ = require('gulp-load-plugins')();
 
 /*
- * > Options
+ * Options
  */
 
 var opts = {};
 
-opts.colors = require('./src/colors.json');
-opts.sizes = require('./src/sizes.json');
+opts.colors = require('./common/colors.json');
+opts.sizes = require('./common/sizes.json');
 opts.envRegEx = new RegExp('([\'|\"]?__version__[\'|\"]?[ ]*[:|=][ ]*[\'|\"]?)(\\d+\\.\\d+\\.\\d+)(-[0-9A-Za-z\.-]+)?([\'|\"]?)', 'i');
 
 
 /*
- * > Helpers
+ * Helpers
  */
 
 var getIconOpts = function() {
-  return JSON.parse(fs.readFileSync('./src/icons.json', 'utf8'));
+  return JSON.parse(fs.readFileSync('./common/icons.json', 'utf8'));
 };
 
 var getIconScope = function(iconOpts) {
@@ -61,17 +61,17 @@ var getIconScope = function(iconOpts) {
 };
 
 /*
- * > Build
+ * Build
  */
 
 gulp.task('build', ['build:settings', 'build:icons']);
 
-// >> Settings
+// Preferences
 
 gulp.task('build:settings', function() {
   opts.icons = getIconOpts();
 
-  return gulp.src('./src/assets/*.svg', {read: false})
+  return gulp.src('./assets/*.svg', {read: false})
     .pipe($.plumber(function(error) {
       console.log('[build:settings]'.bold.magenta + ' There was an issue building icon settings:\n'.bold.red + error.message);
       this.emit('end');
@@ -84,7 +84,7 @@ gulp.task('build:settings', function() {
       var iconSettings = merge();
 
       if (iconScope) {
-        iconSettings.add(gulp.src('./src/templates/preference.xml')
+        iconSettings.add(gulp.src('./common/templates/preference.xml')
           .pipe($.data(function() {
             return {
               name: iconName,
@@ -102,7 +102,7 @@ gulp.task('build:settings', function() {
 
       if (iconAliases) {
         iconSettings.add(iconAliases.map(function(alias) {
-          return gulp.src('./src/templates/alias.xml')
+          return gulp.src('./common/templates/alias.xml')
             .pipe($.data(function() {
               return {
                 alias: alias.name,
@@ -124,14 +124,14 @@ gulp.task('build:settings', function() {
     }));
 });
 
-// >> Icons
+// Icons
 
 gulp.task('build:icons', function() {
   var baseColor = $.recolorSvg.ColorMatcher(color('#000'));
 
   opts.icons = getIconOpts();
 
-  return gulp.src('./src/assets/*.svg')
+  return gulp.src('./assets/*.svg')
     .pipe($.plumber(function(error) {
       console.log('[build:icons]'.bold.magenta + ' There was an issue rasterizing icons:\n'.bold.red + error.message);
       this.emit('end');
@@ -187,7 +187,7 @@ gulp.task('build:icons', function() {
 });
 
 /*
- * > Release
+ * Release
  */
 
 gulp.task('media', function() {
@@ -215,11 +215,11 @@ gulp.task('bump-pkg-version', function() {
 });
 
 gulp.task('bump-env-version', function() {
-  return gulp.src('./util/env.py')
+  return gulp.src('./common/utils/env.py')
     .pipe($.if(argv.patch, $.bump({ regex: opts.envRegEx })))
     .pipe($.if(argv.minor, $.bump({ type: 'minor', regex: opts.envRegEx })))
     .pipe($.if(argv.major, $.bump({ type: 'major', regex: opts.envRegEx })))
-    .pipe(gulp.dest('./util'));
+    .pipe(gulp.dest('./common/utils'));
 });
 
 gulp.task('github-release', function(done) {
@@ -232,21 +232,21 @@ gulp.task('github-release', function(done) {
 });
 
 /*
- * > Watch
+ * Watch
  */
 
 gulp.task('watch', function() {
-  $.watch('./src/assets/*.svg', $.batch(function(events, done) {
+  $.watch('./assets/*.svg', $.batch(function(events, done) {
     gulp.start('build', done);
   }));
 
-  $.watch('./src/*.json', $.batch(function(events, done) {
+  $.watch('./common/*.json', $.batch(function(events, done) {
     gulp.start('build:settings', done);
   }));
 });
 
 /*
- * > Default
+ * Default
  */
 
 gulp.task('default', ['build']);

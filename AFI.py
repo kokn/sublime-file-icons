@@ -5,9 +5,9 @@ import sublime_plugin
 import os
 import re
 
-from .util import log
-from .util.env import *
-from .util.tpl import PATCH_TEMPLATE
+from .common.utils import log
+from .common.utils.env import *
+from .common.templates.patch import PATCH_TEMPLATE
 
 PKG = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 SETTINGS = 'File Icons.sublime-settings'
