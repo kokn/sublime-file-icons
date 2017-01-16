@@ -10,7 +10,7 @@ from .common.utils.env import *
 from .common.templates.patch import PATCH_TEMPLATE
 
 PKG = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
-SETTINGS = 'File Icons.sublime-settings'
+SETTINGS = 'A File Icon.sublime-settings'
 SETTINGS_CHANGED = False
 THEME_EXTENSION = '.sublime-theme'
 UUID = '9ebcce78-4cac-4089-8bd7-d551c634b064'

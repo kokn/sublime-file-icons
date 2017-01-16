@@ -7,7 +7,7 @@ import textwrap
 
 
 __version__ = '2.2.0'
-__pc_name__ = 'zz File Icons'
+__pc_name__ = 'A File Icon'
 
 
 def list2string(obj):
@@ -65,7 +65,7 @@ class FileIconsEnvCommand(sublime_plugin.ApplicationCommand):
 
         msg = textwrap.dedent(
             '''\
-            - File Icons: %(file_icons_version)s
+            - A File Icon: %(file_icons_version)s
             - Sublime Text: %(version)s
             - Platform: %(platform)s
             - Package Control: %(pc_install)s

@@ -14,7 +14,7 @@ def log(*args):
 
 def message(*args):
     if DEBUG:
-        log('File Icons: ', *args)
+        log('A File Icon: ', *args)
 
 
 def value(*args):
@@ -24,7 +24,7 @@ def value(*args):
 
 def done():
     if DEBUG:
-        log('File Icons: ', 'Finished')
+        log('A File Icon: ', 'Finished')
         log('***\n')
 
 
@@ -35,5 +35,5 @@ def separator():
 
 def warning():
     log('\n***')
-    log('File Icons: ', WARN)
+    log('A File Icon: ', WARN)
     log('***\n')
