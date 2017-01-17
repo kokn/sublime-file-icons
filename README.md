@@ -219,10 +219,10 @@ I've put a lot of time and effort into making **A File Icon** awesome. If you lo
 
 <!-- Assets -->
 
-[img-downloads]: https://img.shields.io/packagecontrol/dt/A%20File%20Icon.svg?maxAge=3600
+[img-downloads]: https://img.shields.io/packagecontrol/dt/A%20File%20Icon.svg?maxAge=3600&style=flat-square
 [img-getting-started]: https://raw.githubusercontent.com/ihodev/sublime-file-icons/dev/media/getting-started.png
-[img-logo]: https://raw.githubusercontent.com/ihodev/sublime-file-icons/dev/media/logo.png
-[img-patreon]: https://cdn.rawgit.com/ihodev/sublime-file-icons/3.0.0/media/donate.svg
-[img-release]: https://img.shields.io/github/release/ihodev/sublime-file-icons.svg?maxAge=86400
+[img-logo]: https://raw.githubusercontent.com/ihodev/sublime-file-icons/3.0.0/media/logo.png
+[img-patreon]: https://rawgit.com/ihodev/sublime-file-icons/3.0.0/media/donate.svg
+[img-release]: https://img.shields.io/github/release/ihodev/sublime-file-icons.svg?maxAge=86400&style=flat-square
 [img-palette]: https://raw.githubusercontent.com/ihodev/sublime-file-icons/dev/media/palette.png
-[img-twitter]: https://cdn.rawgit.com/ihodev/sublime-file-icons/3.0.0/media/twitter.svg
+[img-twitter]: https://rawgit.com/ihodev/sublime-file-icons/3.0.0/media/twitter.svg
