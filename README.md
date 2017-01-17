@@ -1,6 +1,6 @@
 > **Starting 3.0.0** `zz File Icons` will be renamed to `A File Icon`. I've found the way how to fix/implement [#23](https://github.com/ihodev/sublime-file-icons/issues/23), [#24](https://github.com/ihodev/sublime-file-icons/issues/24). I have no plans to add new icons in 3.0.0, it will bring only the new way of applying them. I apologize for any inconvenience caused.
 
-# ![A File Icon][img-logo]
+# [![A File Icon][img-logo]][downloads]
 
 [![Release][img-release]][release]
 [![Downloads][img-downloads]][downloads]
