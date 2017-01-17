@@ -52,20 +52,20 @@ def get_current_theme():
     return sublime.load_settings('Preferences.sublime-settings').get('theme')
 
 
-class FileIconsEnvCommand(sublime_plugin.ApplicationCommand):
+class AfiEnvCommand(sublime_plugin.ApplicationCommand):
     def run(self):
         info = {}
 
         info['platform'] = sublime.platform()
         info['version'] = sublime.version()
-        info['file_icons_version'] = __version__
+        info['afi_version'] = __version__
         info['pc_install'] = is_installed_by_package_control()
         info['current_theme'] = get_current_theme()
         info['installed_themes'] = get_installed_themes()
 
         msg = textwrap.dedent(
             '''\
-            - A File Icon: %(file_icons_version)s
+            - A File Icon: %(afi_version)s
             - Sublime Text: %(version)s
             - Platform: %(platform)s
             - Package Control: %(pc_install)s

@@ -329,7 +329,7 @@ def init():
     log.value(CURRENT)
 
 
-class FileIconsCleanUpCommand(sublime_plugin.WindowCommand):
+class AfiCleanUpCommand(sublime_plugin.WindowCommand):
     def run(self):
         clear_all()
         activate()
