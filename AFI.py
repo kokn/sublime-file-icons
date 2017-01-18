@@ -27,8 +27,8 @@ CURRENT = {
     'aliases': ''
 }
 
-DIST = 'dist'
-PATCHES = 'patches'
+DIST = ''
+PATCHES = 'icons'
 THEMES = '*' + THEME_EXTENSION
 SUPPORTED_THEMES = '.st-file-icons'
 ALIASES = 'aliases'

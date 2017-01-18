@@ -96,7 +96,7 @@ gulp.task('build:settings', function() {
             basename: iconName,
             extname: '.tmPreferences'
           }))
-          .pipe(gulp.dest('./dist/preferences'))
+          .pipe(gulp.dest('./preferences'))
         );
       }
 
@@ -116,7 +116,7 @@ gulp.task('build:settings', function() {
               basename: alias.name,
               extname: '.tmLanguage'
             }))
-            .pipe(gulp.dest('./dist/aliases'));
+            .pipe(gulp.dest('./aliases'));
         }));
       }
 
@@ -136,7 +136,7 @@ gulp.task('build:icons', function() {
       console.log('[build:icons]'.bold.magenta + ' There was an issue rasterizing icons:\n'.bold.red + error.message);
       this.emit('end');
     }))
-    .pipe($.changed('./dist/patches/icons', {extension: '.png'}))
+    .pipe($.changed('./icons/multi', {extension: '.png'}))
     .pipe($.flatmap(function(stream, file) {
       var iconName = path.basename(file.path, path.extname(file.path));
       var iconOpts = opts.icons[iconName];
@@ -160,7 +160,7 @@ gulp.task('build:icons', function() {
             colorTypeReduction: false,
             paletteReduction: false
           })], {verbose: true}))
-          .pipe(gulp.dest('./dist/patches/icons'));
+          .pipe(gulp.dest('./icons/multi'));
 
         var single = gulp.src(file.path)
           .pipe($.recolorSvg.Replace(
@@ -177,7 +177,7 @@ gulp.task('build:icons', function() {
             colorTypeReduction: false,
             paletteReduction: false
           })], {verbose: true}))
-          .pipe(gulp.dest('./dist/patches/single'));
+          .pipe(gulp.dest('./icons/single'));
 
         return merge(multi, single);
       }));

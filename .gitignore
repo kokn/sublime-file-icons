@@ -7,8 +7,10 @@
 *.log
 *cache
 
+icons/
+aliases/
+preferences/
 node_modules/
-dist/
 
 # OS
 # =============================
