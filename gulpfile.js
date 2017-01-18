@@ -84,7 +84,7 @@ gulp.task('build:settings', function() {
       var iconSettings = merge();
 
       if (iconScope) {
-        iconSettings.add(gulp.src('./common/templates/preference.xml')
+        iconSettings.add(gulp.src('./templates/preference.xml')
           .pipe($.data(function() {
             return {
               name: iconName,
@@ -102,7 +102,7 @@ gulp.task('build:settings', function() {
 
       if (iconAliases) {
         iconSettings.add(iconAliases.map(function(alias) {
-          return gulp.src('./common/templates/alias.xml')
+          return gulp.src('./templates/alias.xml')
             .pipe($.data(function() {
               return {
                 alias: alias.name,
@@ -215,11 +215,11 @@ gulp.task('bump-pkg-version', function() {
 });
 
 gulp.task('bump-env-version', function() {
-  return gulp.src('./common/utils/env.py')
+  return gulp.src('./utils/env.py')
     .pipe($.if(argv.patch, $.bump({ regex: opts.envRegEx })))
     .pipe($.if(argv.minor, $.bump({ type: 'minor', regex: opts.envRegEx })))
     .pipe($.if(argv.major, $.bump({ type: 'major', regex: opts.envRegEx })))
-    .pipe(gulp.dest('./common/utils'));
+    .pipe(gulp.dest('./utils'));
 });
 
 gulp.task('github-release', function(done) {

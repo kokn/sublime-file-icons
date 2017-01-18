@@ -22,12 +22,6 @@
 	// `color` option.
 	"color_on_select": "",
 
-	// Show debug logging.
-	"debug": false,
-
-	// Set to true to override icons of the supported themes.
-	"force_override": false,
-
 	// The opacity level of the default icon state.
 	"opacity": 0.75,
 
@@ -41,9 +35,16 @@
 	// change it to better fit your custom theme.
 	"size": 8,
 
+	// Set `true` to use icons provided by the package if your theme supports icon
+	// customization.
+	"force": false,
+
 	// By default the package provides syntax aliases to apply such icons as
 	// `Gulpfile.js`, `webpack.config.js`, `package.json` and etc.
 	// If you don't want to use them you can apply icons for syntaxes only via
 	// setting this option to `false`.
-	"aliases": true
+	"aliases": true,
+
+	// Set `true` to enable dev mode.
+	"dev": false
 }

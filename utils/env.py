@@ -4,10 +4,13 @@ import os
 import sublime
 import sublime_plugin
 import textwrap
+import json
+
+from ..common import settings
 
 
 __version__ = '2.2.0'
-__pc_name__ = 'A File Icon'
+__pc_name__ = settings.BASE
 
 
 def list2string(obj):
