@@ -35,16 +35,16 @@
 	// change it to better fit your custom theme.
 	"size": 8,
 
-	// Set `true` to use icons provided by the package if your theme supports icon
-	// customization.
-	"force": false,
-
 	// By default the package provides syntax aliases to apply such icons as
 	// `Gulpfile.js`, `webpack.config.js`, `package.json` and etc.
 	// If you don't want to use them you can apply icons for syntaxes only via
 	// setting this option to `false`.
 	"aliases": true,
 
-	// Set `true` to enable dev mode.
-	"dev": false
+	// Set `true` to use icons provided by the package if your theme supports icon
+	// customization (icons provided by the theme will be used by default).
+	"force_mode": false,
+
+	// Set `true` when developing or debugging the package.
+	"dev_mode": false
 }

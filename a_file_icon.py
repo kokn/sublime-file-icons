@@ -1,25 +1,8 @@
-# -*- coding: utf-8 -*-
-
+import os
 import sublime
 import sublime_plugin
-import os
 
-from .common import settings
-from .utils import env
-
-
-class AfiDevListener(sublime_plugin.EventListener):
-    def on_post_save(self, view):
-        if sublime.load_settings(settings.STGS).get('dev'):
-            if not (os.path.dirname(__file__) in view.file_name() and
-                    view.file_name().endswith('.py')):
-                return
-            sublime.run_command('afi_reload', {
-                'main': __file__,
-                'folders': ['templates', 'common', 'utils'],
-                'times': 2,
-                'quiet': False
-            })
+from .utils import environment
 
 
 # from .common.utils import log

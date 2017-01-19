@@ -23,12 +23,8 @@
 							},
 							{ "caption": "-" },
 							{
-								"caption": "Clean Up",
-								"command": "afi_clean_up"
-							},
-							{
 								"caption": "Environment",
-								"command": "afi_env"
+								"command": "afi_environment"
 							}
 						]
 					}

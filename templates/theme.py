@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
-PATCH = '''
-// %(name)s Theme Overlay
+template = """
+// %(name)s Patch
 // ============================================================================
 
 [
@@ -32,4 +30,4 @@ PATCH = '''
     "layer0.opacity": %(opacity_on_select)s
   }
 ]
-'''
+"""

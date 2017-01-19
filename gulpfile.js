@@ -1,24 +1,19 @@
-/* A File Icon Builder
- * -------------------------------------------------------------------------- *
- * Developed with love & patience by Ihor Oleksandrov <@ihodev>
- * -------------------------------------------------------------------------- */
-
-'use strict';
+"use strict";
 
 /*
  * Plugins
  */
 
-var gulp = require('gulp');
-var color = require('color');
-var colors = require('colors');
-var path = require('path');
-var conventionalChangelog = require('conventional-changelog');
-var conventionalGithubReleaser = require('conventional-github-releaser');
-var argv = require('yargs').argv;
-var fs = require('fs');
-var merge = require('merge-stream');
-var $ = require('gulp-load-plugins')();
+var gulp = require("gulp");
+var color = require("color");
+var colors = require("colors");
+var path = require("path");
+var conventionalChangelog = require("conventional-changelog");
+var conventionalGithubReleaser = require("conventional-github-releaser");
+var argv = require("yargs").argv;
+var fs = require("fs");
+var merge = require("merge-stream");
+var $ = require("gulp-load-plugins")();
 
 /*
  * Options
@@ -26,34 +21,32 @@ var $ = require('gulp-load-plugins')();
 
 var opts = {};
 
-opts.colors = require('./common/colors.json');
-opts.sizes = require('./common/sizes.json');
-opts.envRegEx = new RegExp('([\'|\"]?__version__[\'|\"]?[ ]*[:|=][ ]*[\'|\"]?)(\\d+\\.\\d+\\.\\d+)(-[0-9A-Za-z\.-]+)?([\'|\"]?)', 'i');
-
+opts.colors = require("./common/colors.json");
+opts.sizes = require("./common/sizes.json");
 
 /*
  * Helpers
  */
 
 var getIconOpts = function() {
-  return JSON.parse(fs.readFileSync('./common/icons.json', 'utf8'));
+  return JSON.parse(fs.readFileSync("./common/icons.json", "utf8"));
 };
 
 var getIconScope = function(iconOpts) {
   var syntaxes = iconOpts.syntaxes;
   var aliases = iconOpts.aliases;
 
-  var scope = '';
+  var scope = "";
 
   if (syntaxes) {
     for (var syntax in syntaxes) {
-      scope = scope + syntaxes[syntax].scope + ', ';
+      scope = scope + syntaxes[syntax].scope + ", ";
     }
   }
 
   if (aliases) {
     for (var alias in aliases) {
-      scope = scope + aliases[alias].scope + ', ';
+      scope = scope + aliases[alias].scope + ", ";
     }
   }
 
@@ -64,17 +57,17 @@ var getIconScope = function(iconOpts) {
  * Build
  */
 
-gulp.task('build', ['build:settings', 'build:icons']);
+gulp.task("build", ["build:settings", "build:icons"]);
 
 // Preferences
 
-gulp.task('build:settings', function() {
+gulp.task("build:settings", function() {
   opts.icons = getIconOpts();
 
-  return gulp.src('./assets/*.svg', {read: false})
+  return gulp.src("./assets/*.svg", {read: false})
     .pipe($.plumber(function(error) {
-      console.log('[build:settings]'.bold.magenta + ' There was an issue building icon settings:\n'.bold.red + error.message);
-      this.emit('end');
+      console.log("[build:settings]".bold.magenta + " There was an issue building icon settings:\n".bold.red + error.message);
+      this.emit("end");
     }))
     .pipe($.flatmap(function(stream, file) {
       var iconName = path.basename(file.path, path.extname(file.path));
@@ -84,7 +77,7 @@ gulp.task('build:settings', function() {
       var iconSettings = merge();
 
       if (iconScope) {
-        iconSettings.add(gulp.src('./templates/preference.xml')
+        iconSettings.add(gulp.src("./templates/preference.xml")
           .pipe($.data(function() {
             return {
               name: iconName,
@@ -94,15 +87,15 @@ gulp.task('build:settings', function() {
           .pipe($.template())
           .pipe($.rename({
             basename: iconName,
-            extname: '.tmPreferences'
+            extname: ".tmPreferences"
           }))
-          .pipe(gulp.dest('./preferences'))
+          .pipe(gulp.dest("./preferences"))
         );
       }
 
       if (iconAliases) {
         iconSettings.add(iconAliases.map(function(alias) {
-          return gulp.src('./templates/alias.xml')
+          return gulp.src("./templates/alias.xml")
             .pipe($.data(function() {
               return {
                 alias: alias.name,
@@ -114,9 +107,9 @@ gulp.task('build:settings', function() {
             .pipe($.template())
             .pipe($.rename({
               basename: alias.name,
-              extname: '.tmLanguage'
+              extname: ".tmLanguage"
             }))
-            .pipe(gulp.dest('./aliases'));
+            .pipe(gulp.dest("./aliases"));
         }));
       }
 
@@ -126,17 +119,17 @@ gulp.task('build:settings', function() {
 
 // Icons
 
-gulp.task('build:icons', function() {
-  var baseColor = $.recolorSvg.ColorMatcher(color('#000'));
+gulp.task("build:icons", function() {
+  var baseColor = $.recolorSvg.ColorMatcher(color("#000"));
 
   opts.icons = getIconOpts();
 
-  return gulp.src('./assets/*.svg')
+  return gulp.src("./assets/*.svg")
     .pipe($.plumber(function(error) {
-      console.log('[build:icons]'.bold.magenta + ' There was an issue rasterizing icons:\n'.bold.red + error.message);
-      this.emit('end');
+      console.log("[build:icons]".bold.magenta + " There was an issue rasterizing icons:\n".bold.red + error.message);
+      this.emit("end");
     }))
-    .pipe($.changed('./icons/multi', {extension: '.png'}))
+    .pipe($.changed("./icons/multi", {extension: ".png"}))
     .pipe($.flatmap(function(stream, file) {
       var iconName = path.basename(file.path, path.extname(file.path));
       var iconOpts = opts.icons[iconName];
@@ -160,12 +153,12 @@ gulp.task('build:icons', function() {
             colorTypeReduction: false,
             paletteReduction: false
           })], {verbose: true}))
-          .pipe(gulp.dest('./icons/multi'));
+          .pipe(gulp.dest("./icons/multi"));
 
         var single = gulp.src(file.path)
           .pipe($.recolorSvg.Replace(
             [baseColor],
-            [color('white')]
+            [color("white")]
           ))
           .pipe($.svg2png({
             width: size.size,
@@ -177,7 +170,7 @@ gulp.task('build:icons', function() {
             colorTypeReduction: false,
             paletteReduction: false
           })], {verbose: true}))
-          .pipe(gulp.dest('./icons/single'));
+          .pipe(gulp.dest("./icons/single"));
 
         return merge(multi, single);
       }));
@@ -190,44 +183,34 @@ gulp.task('build:icons', function() {
  * Release
  */
 
-gulp.task('media', function() {
-  return gulp.src('./media/*.png')
+gulp.task("media", function() {
+  return gulp.src("./media/*.png")
     .pipe($.imagemin({verbose: true}))
-    .pipe(gulp.dest('./media'));
+    .pipe(gulp.dest("./media"));
 });
 
-gulp.task('changelog', function() {
+gulp.task("changelog", function() {
   return conventionalChangelog({
-    preset: 'angular',
+    preset: "angular",
     releaseCount: 0
   })
-  .pipe(fs.createWriteStream('CHANGELOG.md'));
+  .pipe(fs.createWriteStream("CHANGELOG.md"));
 });
 
-gulp.task('bump-version', ['bump-pkg-version', 'bump-env-version']);
-
-gulp.task('bump-pkg-version', function() {
-  return gulp.src('./package.json')
-    .pipe($.if(argv.patch, $.bump()))
-    .pipe($.if(argv.minor, $.bump({ type: 'minor' })))
-    .pipe($.if(argv.major, $.bump({ type: 'major' })))
-    .pipe(gulp.dest('./'));
+gulp.task("bump-version", function() {
+  return gulp.src("./package.json")
+    .pipe($.if(argv.patch, $.bump({ type: "patch" })))
+    .pipe($.if(argv.minor, $.bump({ type: "minor" })))
+    .pipe($.if(argv.major, $.bump({ type: "major" })))
+    .pipe(gulp.dest("./"));
 });
 
-gulp.task('bump-env-version', function() {
-  return gulp.src('./utils/env.py')
-    .pipe($.if(argv.patch, $.bump({ regex: opts.envRegEx })))
-    .pipe($.if(argv.minor, $.bump({ type: 'minor', regex: opts.envRegEx })))
-    .pipe($.if(argv.major, $.bump({ type: 'major', regex: opts.envRegEx })))
-    .pipe(gulp.dest('./utils'));
-});
-
-gulp.task('github-release', function(done) {
+gulp.task("github-release", function(done) {
   conventionalGithubReleaser({
-    type: 'oauth',
+    type: "oauth",
     token: process.env.CONVENTIONAL_GITHUB_RELEASER_TOKEN
   }, {
-    preset: 'angular'
+    preset: "angular"
   }, done);
 });
 
@@ -235,13 +218,13 @@ gulp.task('github-release', function(done) {
  * Watch
  */
 
-gulp.task('watch', function() {
-  $.watch('./assets/*.svg', $.batch(function(events, done) {
-    gulp.start('build', done);
+gulp.task("watch", function() {
+  $.watch("./assets/*.svg", $.batch(function(events, done) {
+    gulp.start("build", done);
   }));
 
-  $.watch('./common/*.json', $.batch(function(events, done) {
-    gulp.start('build:settings', done);
+  $.watch("./common/*.json", $.batch(function(events, done) {
+    gulp.start("build:settings", done);
   }));
 });
 
@@ -249,4 +232,4 @@ gulp.task('watch', function() {
  * Default
  */
 
-gulp.task('default', ['build']);
+gulp.task("default", ["build"]);

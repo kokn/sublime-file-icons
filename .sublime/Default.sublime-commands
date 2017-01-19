@@ -1,11 +1,7 @@
 [
 	{
-		"caption": "A File Icon: Clean Up",
-		"command": "afi_clean_up"
-	},
-	{
 		"caption": "A File Icon: Environment",
-		"command": "afi_env"
+		"command": "afi_environment"
 	},
 	{
 		"caption": "A File Icon: Settings",

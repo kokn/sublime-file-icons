@@ -6,6 +6,7 @@
 *.sublime-theme
 *.log
 *cache
+*.pyc
 
 icons/
 aliases/
