@@ -1,58 +1,49 @@
 import sublime
-import os
 import json
 
-from ..vendor import stringcase
+from . import properties
+from ..utils import logging
 from ..vendor import jsonutils
 
-
-# COMMON
-# -----------------------------------------------------------------------------
-
-def get_package_name():
-    name = os.path.basename(os.path.dirname(os.path.dirname(__file__)))
-
-    if name.endswith(".sublime-package"):
-        name = name[:-16]
-
-    return name
+PACKAGE_DEFAULT_SETTINGS = {}
+PACKAGE_CURRENT_SETTINGS = {}
 
 
-PACKAGE_NAME = get_package_name()
-PACKAGE_MAIN = stringcase.snakecase(PACKAGE_NAME.replace(" ", "")) + ".py"
+def _get_default_settings():
+    return json.loads(jsonutils.sanitize_json(sublime.load_resource(
+        "Packages/{0}/.sublime/{0}.sublime-settings"
+        .format(properties.PACKAGE_NAME)
+    )))
 
-PACKAGE_SETTINGS_FILE = PACKAGE_NAME + ".sublime-settings"
-SUBLIME_SETTINGS_FILE = "Preferences.sublime-settings"
-PKGCTRL_SETTINGS_FILE = "Package Control.sublime-settigns"
-
-
-# MESSAGES
-# -----------------------------------------------------------------------------
-
-WARNING_MESSAGE = """
-Please restart Sublime Text for the applied icons to take effect ...
-"""
-
-
-# LOGGING
-# -----------------------------------------------------------------------------
-
-TOP_SEPARATOR = "\n***"
-BOTTOM_SEPARATOR = "***\n"
-
-VALUE_PREFIX = "        >>> "
-
-
-# HELPERS
-# -----------------------------------------------------------------------------
 
 def subltxt():
-    return sublime.load_settings(SUBLIME_SETTINGS_FILE)
+    return sublime.load_settings(properties.SUBLIME_SETTINGS_FILE)
 
 
 def pkgctrl():
-    return sublime.load_settings(PKGCTRL_SETTINGS_FILE)
+    return sublime.load_settings(properties.PKGCTRL_SETTINGS_FILE)
 
 
 def package():
-    return sublime.load_settings(PACKAGE_SETTINGS_FILE)
+    return sublime.load_settings(properties.PACKAGE_SETTINGS_FILE)
+
+
+def init():
+    logging.message("Initializing settings")
+
+    global PACKAGE_DEFAULT_SETTINGS
+
+    PACKAGE_DEFAULT_SETTINGS = _get_default_settings()
+
+    update()
+
+
+def update():
+    logging.message("Updating the current settings")
+
+    global PACKAGE_CURRENT_SETTINGS
+
+    for s in PACKAGE_DEFAULT_SETTINGS:
+        PACKAGE_CURRENT_SETTINGS[s] = package().get(s)
+
+    logging.value(PACKAGE_CURRENT_SETTINGS)

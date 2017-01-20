@@ -13,6 +13,7 @@ import sublime_plugin
 import sys
 import traceback
 
+from .common import properties
 from .common import settings
 
 
@@ -24,8 +25,8 @@ class AfiReloadListener(sublime_plugin.EventListener):
 
         sublime.run_command("afi_reload", {
             "main": os.path.join(sublime.packages_path(),
-                                 settings.PACKAGE_NAME,
-                                 settings.PACKAGE_MAIN),
+                                 properties.PACKAGE_NAME,
+                                 properties.PACKAGE_MAIN),
             "folders": [
                 "vendor",
                 "templates",
@@ -56,24 +57,29 @@ class AfiReloadCommand(sublime_plugin.ApplicationCommand):
                         ext == ".py" and root != "__init__"):
                     module = ".".join(
                         [pck_name, folder, os.path.splitext(item)[0]])
+
+                    print(properties.VALUE_PREFIX, end="")
                     sublime_plugin.reload_plugin(module)
             sys.path.pop()
 
         for script in scripts:
             module = pck_name + "." + (script[:-3]
                                        if script.endswith(".py") else script)
+
+            print(properties.VALUE_PREFIX, end="")
             sublime_plugin.reload_plugin(module)
 
         module = sys.modules[pck_name + "." + os.path.splitext(
             os.path.basename(main))[0]]
+
+        print(properties.VALUE_PREFIX, end="")
         sublime_plugin.reload_plugin(module.__name__)
 
         if times > 1:
             return self.reload(main, scripts, folders, times - 1)
 
     def run(self, main, scripts=[], folders=[], times=2, quiet=True):
-        sys.stdout.write(settings.TOP_SEPARATOR + "\n" +
-                         settings.PACKAGE_NAME + ": Reloading plugins\n")
+        sys.stdout.write(properties.RELOAD_MESSAGE)
         sys.stdout.flush()
 
         if quiet:

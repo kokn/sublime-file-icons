@@ -1,9 +1,18 @@
-import os
-import sublime
-import sublime_plugin
+from .common import settings
+from .utils import logging
 
-from .utils import environment
+from .utils.environment import *
 
+
+def init():
+    settings.init()
+
+
+def plugin_loaded():
+    logging.separator()
+    logging.message("Loaded")
+    init()
+    logging.separator()
 
 # from .common.utils import log
 # from .common.utils.env import *

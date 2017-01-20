@@ -4,26 +4,27 @@ import sublime
 import sublime_plugin
 import textwrap
 
+from ..common import properties
 from ..common import settings
 
 
-def get_package_version():
-    pkg_json = sublime.load_resource("Packages/" + settings.PACKAGE_NAME +
+def _get_package_version():
+    pkg_json = sublime.load_resource("Packages/" + properties.PACKAGE_NAME +
                                      "/package.json")
 
     return json.loads(pkg_json)["version"]
 
 
-def is_installed_via_pc():
-    return str(settings.PACKAGE_NAME in set(settings.pkgctrl()
-                                            .get("installed_packages", [])))
+def _is_installed_via_pc():
+    return str(properties.PACKAGE_NAME in set(settings.pkgctrl()
+                                              .get("installed_packages", [])))
 
 
-def get_current_theme():
+def _get_current_theme():
     return settings.subltxt().get("theme")
 
 
-def get_installed_themes():
+def _get_installed_themes():
     installed_resources = sublime.find_resources("*.sublime-theme")
     installed_themes = {}
 
@@ -44,10 +45,10 @@ class AfiEnvironmentCommand(sublime_plugin.ApplicationCommand):
         info["platform"] = sublime.platform()
         info["sublime_version"] = sublime.version()
 
-        info["package_version"] = get_package_version()
-        info["installed_via_pc"] = is_installed_via_pc()
-        info["current_theme"] = get_current_theme()
-        info["installed_themes"] = get_installed_themes()
+        info["package_version"] = _get_package_version()
+        info["installed_via_pc"] = _is_installed_via_pc()
+        info["current_theme"] = _get_current_theme()
+        info["installed_themes"] = _get_installed_themes()
 
         msg = textwrap.dedent(
             """\
