@@ -16,18 +16,6 @@ def _get_default_settings():
     )))
 
 
-def subltxt():
-    return sublime.load_settings(properties.SUBLIME_SETTINGS_FILE)
-
-
-def pkgctrl():
-    return sublime.load_settings(properties.PKGCTRL_SETTINGS_FILE)
-
-
-def package():
-    return sublime.load_settings(properties.PACKAGE_SETTINGS_FILE)
-
-
 def init():
     logging.message("Initializing settings")
 

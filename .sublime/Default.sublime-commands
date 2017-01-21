@@ -4,6 +4,10 @@
 		"command": "afi_environment"
 	},
 	{
+		"caption": "A File Icon: Reload",
+		"command": "afi_reload"
+	},
+	{
 		"caption": "A File Icon: Settings",
 		"command": "edit_settings", "args":
 		{

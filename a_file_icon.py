@@ -1,18 +1,36 @@
-from .common import settings
-from .utils import logging
+import sublime
 
-from .utils.environment import *
+from .common.utils.reloader import ReloadListener
+from .common.utils.debugger import trace
 
 
-def init():
-    settings.init()
+log = trace
 
 
 def plugin_loaded():
-    logging.separator()
-    logging.message("Loaded")
-    init()
-    logging.separator()
+    print("***")
+    log("Loaded")
+    log("Initializing the settings")
+    log("Updating the settings")
+    print("***")
+
+# from .common import settings
+# from .utils import logging
+# from .core import fs
+
+# from .utils.environment import *
+
+
+# def init():
+#     settings.init()
+#     print(fs._is_archive())
+
+
+# def plugin_loaded():
+#     logging.separator()
+#     logging.message("Loaded")
+#     init()
+#     logging.separator()
 
 # from .common.utils import log
 # from .common.utils.env import *

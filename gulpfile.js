@@ -64,7 +64,7 @@ gulp.task("build", ["build:settings", "build:icons"]);
 gulp.task("build:settings", function() {
   opts.icons = getIconOpts();
 
-  return gulp.src("./assets/*.svg", {read: false})
+  return gulp.src("./common/assets/*.svg", {read: false})
     .pipe($.plumber(function(error) {
       console.log("[build:settings]".bold.magenta + " There was an issue building icon settings:\n".bold.red + error.message);
       this.emit("end");
@@ -77,7 +77,7 @@ gulp.task("build:settings", function() {
       var iconSettings = merge();
 
       if (iconScope) {
-        iconSettings.add(gulp.src("./templates/preference.xml")
+        iconSettings.add(gulp.src("./common/templates/preference.xml")
           .pipe($.data(function() {
             return {
               name: iconName,
@@ -95,7 +95,7 @@ gulp.task("build:settings", function() {
 
       if (iconAliases) {
         iconSettings.add(iconAliases.map(function(alias) {
-          return gulp.src("./templates/alias.xml")
+          return gulp.src("./common/templates/alias.xml")
             .pipe($.data(function() {
               return {
                 alias: alias.name,
@@ -124,7 +124,7 @@ gulp.task("build:icons", function() {
 
   opts.icons = getIconOpts();
 
-  return gulp.src("./assets/*.svg")
+  return gulp.src("./common/assets/*.svg")
     .pipe($.plumber(function(error) {
       console.log("[build:icons]".bold.magenta + " There was an issue rasterizing icons:\n".bold.red + error.message);
       this.emit("end");
@@ -219,7 +219,7 @@ gulp.task("github-release", function(done) {
  */
 
 gulp.task("watch", function() {
-  $.watch("./assets/*.svg", $.batch(function(events, done) {
+  $.watch("./common/assets/*.svg", $.batch(function(events, done) {
     gulp.start("build", done);
   }));
 
