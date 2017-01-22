@@ -1,18 +1,16 @@
 import sublime
 
 from .common.utils.reloader import ReloadListener
-from .common.utils.debugger import trace
-
-
-log = trace
+from .common.utils import logging
+from .common.utils.environment import *
 
 
 def plugin_loaded():
-    print("***")
-    log("Loaded")
-    log("Initializing the settings")
-    log("Updating the settings")
-    print("***")
+    print()
+    logging.log("Loaded")
+    logging.log("Initializing the settings")
+    logging.log("Updating the settings")
+    print()
 
 # from .common import settings
 # from .utils import logging

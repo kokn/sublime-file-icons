@@ -1,3 +1,11 @@
+"""
+Package Reloader
+
+Based on https://github.com/divmain/GitSavvy/blob/master/common/util/reload.py
+
+All credit goes to Dale Bustad <@divmain>
+"""
+
 import builtins
 import functools
 import importlib
@@ -10,11 +18,10 @@ import sublime_plugin
 
 from contextlib import contextmanager
 
-from .debugger import StackMeter, trace
+from . import logging
 from .. import preferences
 
-
-log = trace.for_tag("reload")
+dump = logging.dump.tag("reloading")
 
 
 def reload_plugin():
@@ -29,7 +36,7 @@ def reload_plugin():
     try:
         reload_modules(main, modules)
     except:
-        log("ERROR", fill="")
+        dump("error")
         reload_modules(main, modules, perform_reload=False)
         raise
     finally:
@@ -46,8 +53,7 @@ def ensure_loaded(main, modules):
     if missing_modules:
         for name, module in missing_modules:
             sys.modules[name] = modules
-            print(preferences.PACKAGE_ABBR + " [reload] BUG!", "Restored",
-                  name)
+            dump("bug! ", "restored ", name)
 
         main = sys.modules[preferences.PACKAGE_NAME + "." +
                            preferences.PACKAGE_MAIN]
@@ -100,7 +106,7 @@ def reload_modules(main, modules, perform_reload=True):
 
         if perform_reload:
             with stack_meter as depth:
-                log("reloading", ("| " * depth) + "|--", name)
+                dump("reloading ", ("| " * depth) + "|-- ", name)
                 try:
                     return module.__loader__.load_module(name)
                 except:
@@ -109,7 +115,7 @@ def reload_modules(main, modules, perform_reload=True):
                     raise
         else:
             if name not in loaded_modules:
-                log("NO RELOAD", "--", name)
+                dump("no reload ", "-- ", name)
             return module
 
     with intercepting_imports(module_reloader), \
@@ -117,6 +123,7 @@ def reload_modules(main, modules, perform_reload=True):
         # Now, import all the modules back, in order, starting with the main
         # module. This will reload all the modules directly or indirectly
         # referenced by the main one, i.e. usually most of our modules.
+        print(preferences.PACKAGE_NAME + ":", end=" ")
         sublime_plugin.reload_plugin(main.__name__)
 
         # Be sure to bring back *all* the modules that used to be loaded, not
@@ -207,6 +214,24 @@ def intercepting_imports(hook):
     finally:
         if hook in sys.meta_path:
             sys.meta_path.remove(hook)
+
+
+class StackMeter:
+    """
+    Reentrant context manager counting the reentrancy depth.
+    """
+
+    def __init__(self, depth=0):
+        super().__init__()
+        self.depth = depth
+
+    def __enter__(self):
+        depth = self.depth
+        self.depth += 1
+        return depth
+
+    def __exit__(self, *exc_info):
+        self.depth -= 1
 
 
 class FilteringImportHook:

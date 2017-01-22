@@ -48,8 +48,10 @@
 	// Set `true` when developing or debugging the package.
 	"dev_mode": false,
 
+	// A list of tags to filter the output of logging.
+	// Only takes its effect when `dev_mode` is `true`.
 	"dev_trace": [
-		"debug",
-		"reload"
+		"logging",
+		"reloading"
 	]
 }

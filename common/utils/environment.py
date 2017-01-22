@@ -4,24 +4,23 @@ import sublime
 import sublime_plugin
 import textwrap
 
-from ..common import properties
-from ..common import settings
+from .. import preferences
 
 
 def _get_package_version():
-    pkg_json = sublime.load_resource("Packages/" + properties.PACKAGE_NAME +
+    pkg_json = sublime.load_resource("Packages/" + preferences.PACKAGE_NAME +
                                      "/package.json")
 
     return json.loads(pkg_json)["version"]
 
 
 def _is_installed_via_pc():
-    return str(properties.PACKAGE_NAME in set(settings.pkgctrl()
-                                              .get("installed_packages", [])))
+    return str(preferences.PACKAGE_NAME in set(preferences.pkgctrl()
+                                               .get("installed_packages", [])))
 
 
 def _get_current_theme():
-    return settings.subltxt().get("theme")
+    return preferences.subltxt().get("theme")
 
 
 def _get_installed_themes():
