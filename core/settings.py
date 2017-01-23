@@ -1,9 +1,9 @@
 import sublime
 import json
 
-from . import properties
-from ..utils import logging
-from ..vendor import jsonutils
+from ..common import preferences
+from ..common.vendor import jsonutils
+from ..common.utils.logging import log, dump
 
 PACKAGE_DEFAULT_SETTINGS = {}
 PACKAGE_CURRENT_SETTINGS = {}
@@ -12,12 +12,12 @@ PACKAGE_CURRENT_SETTINGS = {}
 def _get_default_settings():
     return json.loads(jsonutils.sanitize_json(sublime.load_resource(
         "Packages/{0}/.sublime/{0}.sublime-settings"
-        .format(properties.PACKAGE_NAME)
+        .format(preferences.PACKAGE_NAME)
     )))
 
 
 def init():
-    logging.message("Initializing settings")
+    log("Initializing settings")
 
     global PACKAGE_DEFAULT_SETTINGS
 
@@ -27,11 +27,11 @@ def init():
 
 
 def update():
-    logging.message("Updating the current settings")
+    log("Updating the current settings")
 
     global PACKAGE_CURRENT_SETTINGS
 
     for s in PACKAGE_DEFAULT_SETTINGS:
-        PACKAGE_CURRENT_SETTINGS[s] = package().get(s)
+        PACKAGE_CURRENT_SETTINGS[s] = preferences.package().get(s)
 
-    logging.value(PACKAGE_CURRENT_SETTINGS)
+    dump(PACKAGE_CURRENT_SETTINGS)

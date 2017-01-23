@@ -10,7 +10,7 @@ def _tags():
         return []
 
 
-def _trace(*args, tag="logging", **kwargs):
+def _trace(*args, tag="standard", **kwargs):
     if tag not in _tags():
         return
 
@@ -38,8 +38,13 @@ def warning():
     _trace(preferences.WARNING_MESSAGE)
 
 
+def log_tag(tag):
+    return functools.partial(log, tag=tag)
+
+
 def dump_tag(tag):
     return functools.partial(dump, tag=tag)
 
 
+log.tag = log_tag
 dump.tag = dump_tag

@@ -51,7 +51,7 @@
 	// A list of tags to filter the output of logging.
 	// Only takes its effect when `dev_mode` is `true`.
 	"dev_trace": [
-		"logging",
-		"reloading"
+		"standard",
+		"reload"
 	]
 }

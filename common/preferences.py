@@ -10,6 +10,7 @@ from .vendor import stringcase
 PACKAGE_BASE = os.path.basename(os.path.dirname(os.path.dirname(__file__)))
 PACKAGE_NAME = os.path.splitext(PACKAGE_BASE)[0]
 PACKAGE_MAIN = stringcase.snakecase(PACKAGE_NAME.replace(" ", ""))
+PACKAGE_ABBR = "".join(c for c in PACKAGE_NAME if c.isupper())
 
 PACKAGE_SETTINGS_FILE = PACKAGE_NAME + ".sublime-settings"
 SUBLIME_SETTINGS_FILE = "Preferences.sublime-settings"
@@ -26,6 +27,12 @@ WARNING_MESSAGE = """
 """.format(PACKAGE_NAME)
 
 DONE_MESSAGE = "{}: Finished".format(PACKAGE_NAME)
+
+
+# PATCHING
+# -----------------------------------------------------------------------------
+
+PATCH_ROOT = "zzz" + PACKAGE_ABBR.lower()
 
 
 # HELPERS

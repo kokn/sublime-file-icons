@@ -21,7 +21,8 @@ from contextlib import contextmanager
 from . import logging
 from .. import preferences
 
-dump = logging.dump.tag("reloading")
+dump = logging.dump.tag("reload")
+log = logging.log.tag("reload")
 
 
 def reload_plugin():
@@ -123,7 +124,7 @@ def reload_modules(main, modules, perform_reload=True):
         # Now, import all the modules back, in order, starting with the main
         # module. This will reload all the modules directly or indirectly
         # referenced by the main one, i.e. usually most of our modules.
-        print(preferences.PACKAGE_NAME + ":", end=" ")
+        log(sep="", end="")
         sublime_plugin.reload_plugin(main.__name__)
 
         # Be sure to bring back *all* the modules that used to be loaded, not
