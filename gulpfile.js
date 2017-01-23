@@ -107,7 +107,7 @@ gulp.task("build:settings", function() {
             .pipe($.template())
             .pipe($.rename({
               basename: alias.name,
-              extname: ".tmLanguage"
+              extname: ".disabled-tmLanguage"
             }))
             .pipe(gulp.dest("./aliases"));
         }));

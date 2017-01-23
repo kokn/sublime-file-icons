@@ -5,11 +5,13 @@ from .common.utils.reloader import ReloadListener
 
 from .core import settings
 from .core import icons
+from .core import aliases
 
 
 def init():
     settings.init()
     icons.init()
+    aliases.init()
 
 
 def plugin_loaded():

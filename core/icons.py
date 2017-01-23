@@ -74,7 +74,7 @@ def provide():
 
 
 def init():
-    log("Checking icons")
+    log("Initializing icons")
 
     if os.path.exists(path.get_package_overlay()):
         dump("All the necessary icon files are provided")
