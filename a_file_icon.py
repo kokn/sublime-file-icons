@@ -1,20 +1,18 @@
 import sublime
 
 from .common.utils.environment import *
-from .common.utils.logging import log
 from .common.utils.reloader import ReloadListener
 
-from .core import fs
 from .core import settings
+from .core import icons
 
 
 def init():
     settings.init()
-    fs.init()
+    icons.init()
 
 
 def plugin_loaded():
-    log("Loaded")
     init()
 
 # from .common.utils import log
