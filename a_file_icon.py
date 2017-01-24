@@ -1,10 +1,8 @@
-import sublime
-
-from .common.utils.environment import *
-from .common.utils.reloader import ReloadListener
+from .common.utils.environment import AfiEnvironmentCommand
+from .common.utils.reloader import AfiReloadListener
+from .core.themes import AfiPatchCommand
 
 from .core import settings
-from .core import themes
 from .core import icons
 from .core import aliases
 

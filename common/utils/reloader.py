@@ -255,7 +255,7 @@ class FilteringImportHook:
             return self
 
 
-class ReloadListener(sublime_plugin.EventListener):
+class AfiReloadListener(sublime_plugin.EventListener):
     def on_post_save(self, view):
         file_path = view.file_name()
 

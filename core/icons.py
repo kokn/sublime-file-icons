@@ -129,6 +129,8 @@ def _copy_specific():
     except Exception as error:
         log("Error during copy")
         dump(error)
+    finally:
+        sublime.run_command("afi_patch")
 
 
 def provide():
