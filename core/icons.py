@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import sublime
@@ -7,6 +8,8 @@ import zipfile
 from ..common import preferences
 from ..common.utils import path
 from ..common.utils.logging import log, dump
+
+from . import themes
 
 
 def _create_dirs():
@@ -24,6 +27,14 @@ def _create_dirs():
     except Exception as error:
         log("Error during create")
         dump(error)
+
+
+def _get_icons_path(package_name):
+    package_path = "Packages/" + package_name
+    for res in sublime.find_resources("file_type_default.png"):
+        if res.startswith(package_path):
+            return os.path.dirname(res)
+    return False
 
 
 def _extract_general():
@@ -66,11 +77,67 @@ def _copy_general():
         dump(error)
 
 
+def _copy_specific():
+    log("Checking theme specific icons")
+
+    customizable_themes = themes.get_customizable()
+    general_path = path.get_overlay_patches_general()
+    specific_path = path.get_overlay_patches_specific()
+
+    src_multi = os.path.join(general_path, "multi")
+    src_single = os.path.join(general_path, "single")
+
+    pkgicons = json.loads(sublime.load_resource("Packages/" +
+                                                preferences.PACKAGE_NAME +
+                                                "/common/icons.json"))
+    allicons = sublime.find_resources("*.png")
+
+    try:
+        for theme in customizable_themes:
+            theme_patch_path = os.path.join(specific_path, theme)
+            theme_patch_multi_path = os.path.join(theme_patch_path, "multi")
+            theme_patch_single_path = os.path.join(theme_patch_path, "single")
+
+            if not os.path.exists(theme_patch_path):
+                log("Copying `{}` specific icons".format(theme))
+
+                os.makedirs(theme_patch_path)
+                os.makedirs(theme_patch_multi_path)
+                os.makedirs(theme_patch_single_path)
+
+                theme_icons_path = _get_icons_path(theme)
+                theme_icons = [
+                    os.path.basename(os.path.splitext(i)[0])
+                    for i in allicons if i.startswith(theme_icons_path)
+                ]
+
+                for icon in pkgicons:
+                    if icon not in theme_icons:
+                        for filename in os.listdir(src_multi):
+                            if filename.startswith(icon):
+                                shutil.copy(
+                                    os.path.join(src_multi, filename),
+                                    theme_patch_multi_path
+                                )
+
+                        for filename in os.listdir(src_single):
+                            if filename.startswith(icon):
+                                shutil.copy(
+                                    os.path.join(src_single, filename),
+                                    theme_patch_single_path
+                                )
+    except Exception as error:
+        log("Error during copy")
+        dump(error)
+
+
 def provide():
     if preferences.is_package_archive():
         _extract_general()
     else:
         _copy_general()
+
+    _copy_specific()
 
 
 def check():
@@ -80,4 +147,5 @@ def check():
         _create_dirs()
         sublime.set_timeout_async(provide, 0)
     else:
+        sublime.set_timeout_async(_copy_specific, 0)
         dump("All the necessary icons are provided")

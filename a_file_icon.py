@@ -4,6 +4,7 @@ from .common.utils.environment import *
 from .common.utils.reloader import ReloadListener
 
 from .core import settings
+from .core import themes
 from .core import icons
 from .core import aliases
 

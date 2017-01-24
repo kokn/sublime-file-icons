@@ -2,9 +2,9 @@ import json
 import os
 import sublime
 import sublime_plugin
-import textwrap
 
 from .. import preferences
+from ...core.themes import get_current, get_installed
 
 
 def _get_package_version():
@@ -19,24 +19,6 @@ def _is_installed_via_pc():
                                                .get("installed_packages", [])))
 
 
-def _get_current_theme():
-    return preferences.subltxt().get("theme")
-
-
-def _get_installed_themes():
-    installed_resources = sublime.find_resources("*.sublime-theme")
-    installed_themes = {}
-
-    for res in installed_resources:
-        installed_themes.setdefault(os.path.basename(os.path.dirname(res)),
-                                    []).append(os.path.basename(res))
-
-    # if "z file icon" in installed_themes:
-    #     del installed_themes["z file icon"]
-
-    return installed_themes
-
-
 class AfiEnvironmentCommand(sublime_plugin.ApplicationCommand):
     def run(self):
         info = {}
@@ -44,28 +26,33 @@ class AfiEnvironmentCommand(sublime_plugin.ApplicationCommand):
         info["platform"] = sublime.platform()
         info["sublime_version"] = sublime.version()
 
+        info["current_theme"] = get_current()
+        info["installed_themes"] = "".join([
+            "<li>{}</li>".format(k) for k in get_installed().keys()
+        ])
+
         info["package_version"] = _get_package_version()
         info["installed_via_pc"] = _is_installed_via_pc()
-        info["current_theme"] = _get_current_theme()
-        info["installed_themes"] = _get_installed_themes()
 
-        msg = textwrap.dedent(
-            """\
-            - A File Icon: %(package_version)s
-            - Sublime Text: %(sublime_version)s
-            - Platform: %(platform)s
-            - Package Control: %(installed_via_pc)s
-            - Current Theme: %(current_theme)s
-            - Installed Themes: %(installed_themes)s
-            """ % info
-        )
+        msg = """\
+            <b>Platform:</b> %(platform)s
+            <b>A File Icon:</b> %(package_version)s
+            <b>Sublime Text:</b> %(sublime_version)s
+            <b>Package Control:</b> %(installed_via_pc)s
+            <b>Current Theme:</b> %(current_theme)s
+            <b>Installed Themes:</b>
+            <ul>
+            %(installed_themes)s
+            </ul>
+        """ % info
 
         view = sublime.active_window().active_view()
 
         def copy_and_hide(msg):
-            sublime.set_clipboard(msg)
+            sublime.set_clipboard(msg.replace("    ", ""))
             view.hide_popup()
 
-        view.show_popup(msg.replace("\n", "<br>") +
-                        "<br><a href=\"" + msg + "\">Copy</a>",
+        view.show_popup("<style>ul { margin: 0;}</style>" +
+                        "<a href=\"" + msg + "\">Copy</a><br><br>" +
+                        msg.replace("\n", "<br>").replace("    ", ""),
                         on_navigate=copy_and_hide)
