@@ -10,43 +10,59 @@ from ..common.utils.logging import log, dump
 
 
 def _is_enabled():
-    if os.path.exists(path.get_aliases()):
+    if os.path.exists(path.get_overlay_aliases()):
         return True
 
     return False
 
 
-def _remove_aliases():
+def _remove():
     log("Removing aliases")
 
     try:
-        shutil.rmtree(os.path.join(path.get_package_overlay(), "aliases"))
+        shutil.rmtree(path.get_overlay_aliases())
     except Exception as error:
         log("Error during remove")
         dump(error)
 
 
-def _copy_aliases():
+def _rename():
+    log("Renaming aliases")
+
+    aliases_path = path.get_overlay_aliases()
+
+    try:
+        for alias_base in os.listdir(aliases_path):
+            alias_path = os.path.join(aliases_path, alias_base)
+
+            if os.path.isfile(alias_path):
+                name, ext = os.path.splitext(alias_path)
+                os.rename(alias_path, alias_path.replace(".disabled-", "."))
+    except Exception as error:
+        log("Error during rename")
+        dump(error)
+
+
+def _copy():
     log("Copying aliases")
 
-    package_path = path.get_package_folder()
-    overlay_path = path.get_package_overlay()
-
-    src = os.path.join(package_path, "aliases")
-    dest = os.path.join(overlay_path, "aliases")
+    src = path.get_package_aliases()
+    dest = path.get_overlay_aliases()
 
     try:
         shutil.copytree(src, dest)
     except Exception as error:
         log("Error during copy")
         dump(error)
+    else:
+        _rename()
 
 
-def _extract_aliases():
+def _extract():
     log("Extracting aliases")
 
     temp_dir = tempfile.mkdtemp()
-    dest_path = path.get_aliases()
+    dest_path = path.get_overlay_aliases()
 
     try:
         with zipfile.ZipFile(path.get_package_archive(), "r") as z:
@@ -64,27 +80,31 @@ def _extract_aliases():
     except Exception as error:
         log("Error during extract")
         dump(error)
+    else:
+        _rename()
 
 
 def enable():
-    if preferences.is_package_archive():
-        _extract_aliases()
+    if not _is_enabled():
+        if preferences.is_package_archive():
+            sublime.set_timeout_async(_extract, 0)
+        else:
+            sublime.set_timeout_async(_copy, 0)
     else:
-        _copy_aliases()
+        dump("Aliases already enabled")
 
 
 def disable():
-    _remove_aliases()
+    if _is_enabled():
+        sublime.set_timeout_async(_remove, 0)
+    else:
+        dump("Aliases already disabled")
 
 
-def init():
-    log("Initializing aliases")
+def check():
+    log("Checking aliases")
 
     if preferences.package().get("aliases"):
-        if not _is_enabled():
-            enable()
-        else:
-            dump("All the necessary alias files are provided")
+        enable()
     else:
-        if _is_enabled():
-            disable()
+        disable()

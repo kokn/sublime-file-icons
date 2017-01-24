@@ -13,8 +13,8 @@ def _create_dirs():
     log("Creating directories")
 
     try:
-        g = path.get_patches_general()
-        s = path.get_patches_specific()
+        g = path.get_overlay_patches_general()
+        s = path.get_overlay_patches_specific()
 
         if not os.path.exists(g):
             os.makedirs(g)
@@ -30,7 +30,7 @@ def _extract_general():
     log("Extracting general icons")
 
     temp_dir = tempfile.mkdtemp()
-    dest_path = path.get_patches_general()
+    dest_path = path.get_overlay_patches_general()
 
     try:
         with zipfile.ZipFile(path.get_package_archive(), "r") as z:
@@ -49,11 +49,11 @@ def _extract_general():
 def _copy_general():
     log("Copying general icons")
 
-    package_path = path.get_package_folder()
-    general_path = path.get_patches_general()
+    package_path = path.get_package_icons()
+    general_path = path.get_overlay_patches_general()
 
-    src_multi = os.path.join(package_path, "icons", "multi")
-    src_single = os.path.join(package_path, "icons", "single")
+    src_multi = os.path.join(package_path, "multi")
+    src_single = os.path.join(package_path, "single")
 
     dest_multi = os.path.join(general_path, "multi")
     dest_single = os.path.join(general_path, "single")
@@ -73,11 +73,11 @@ def provide():
         _copy_general()
 
 
-def init():
-    log("Initializing icons")
+def check():
+    log("Checking icons")
 
-    if os.path.exists(path.get_package_overlay()):
-        dump("All the necessary icon files are provided")
-    else:
+    if not os.path.exists(path.get_overlay()):
         _create_dirs()
         sublime.set_timeout_async(provide, 0)
+    else:
+        dump("All the necessary icons are provided")

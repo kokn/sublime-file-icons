@@ -10,8 +10,8 @@ from .core import aliases
 
 def init():
     settings.init()
-    icons.init()
-    aliases.init()
+    icons.check()
+    aliases.check()
 
 
 def plugin_loaded():
